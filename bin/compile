@@ -22,4 +22,8 @@ Host github
   StrictHostKeyChecking no
 EOF
 
+chmod 700 $ssh_dir
+chmod 600 $ssh_dir/config
+chmod 600 $ssh_dir/id_rsa.github
+
 exit 0
