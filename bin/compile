@@ -1,0 +1,29 @@
+#!/bin/bash
+
+build_dir=$1
+env_dir=$3
+
+if [[ ! -f $env_dir/GITHUB_SSH_KEY_PASS ]]; then
+   echo '  ! No $GITHUB_SSH_KEY_PASS specified, but ssh/github_rsa exists'
+   exit 1
+fi
+
+set -e
+
+ssh_dir=~/.ssh
+mkdir $ssh_dir || true
+openssl enc -aes-128-cbc -d -in $build_dir/ssh/github_rsa -out $ssh_dir/id_rsa.github -pass file:$env_dir/GITHUB_SSH_KEY_PASS
+
+cat >>$ssh_dir/config <<EOF
+Host github
+  Hostname github.com
+  IdentityFile $ssh_dir/id_rsa.github
+  IdentitiesOnly yes
+  StrictHostKeyChecking no
+EOF
+
+chmod 700 $ssh_dir
+chmod 600 $ssh_dir/config
+chmod 600 $ssh_dir/id_rsa.github
+
+exit 0
