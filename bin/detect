@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -f $1/ssh/github_rsa ]; then
-   echo "-----> Github SSH key detected, decrypting"
+   echo "Github SSH key detected, decrypting"
    exit 0
 else
   exit 1
